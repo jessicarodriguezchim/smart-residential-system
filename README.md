@@ -1,58 +1,145 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema Integral de Administración de Fraccionamientos y Control Residencial
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-## About Laravel
+Plataforma inteligente y robusta para la administración administrativa, financiera y de accesos (caseta) en desarrollos residenciales y fraccionamientos. Desarrollado con **Laravel 12** y **PHP 8.4**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Características Clave
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Módulo RBAC Completo**: Roles de Administrador, Vigilante y Residente con accesos controlados por middleware de Laravel.
+* **Control de Accesos (Caseta)**: Registro ágil de entradas y salidas de visitantes por lote o mediante códigos QR.
+* **Módulo Financiero Automatizado**: Generación mensual de cuotas de mantenimiento, cálculo automático de recargos moratorios e integración con Stripe y Mercado Pago.
+* **Expedientes Digitales**: Almacenamiento seguro de contratos, escrituras y documentos de propietarios.
+* **Mapa SVG Interactivo**: Visualización gráfica del fraccionamiento en tiempo real con estados de venta de lotes.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Requisitos de Entorno
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **PHP** >= 8.3 (Recomendado 8.4)
+* **Composer** >= 2.8
+* **MySQL** >= 8.0
+* **Docker & Docker Compose** (Opcional)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🐳 Despliegue con Docker
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+El proyecto incluye un entorno Docker multicontenedor preconfigurado.
 
-```bash
-composer require laravel/boost --dev
+1. **Clonar e Inicializar variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   *Nota: Asegúrate de configurar las variables de base de datos en tu `.env` para apuntar al contenedor de base de datos local:*
+   ```ini
+   DB_CONNECTION=mysql
+   DB_HOST=db
+   DB_PORT=3306
+   DB_DATABASE=fraccionamiento
+   DB_USERNAME=root
+   DB_PASSWORD=root
+   ```
 
-php artisan boost:install
+2. **Levantar contenedores**:
+   ```bash
+   docker compose up -d --build
+   ```
+
+3. **Ejecutar migraciones y seeders dentro del contenedor**:
+   ```bash
+   docker compose exec app php artisan migrate:fresh --seed
+   ```
+
+4. **Acceso al Sitio**:
+   * Aplicación Web: [http://localhost:8080](http://localhost:8080)
+   * Base de datos: `127.0.0.1:33066` (Usuario: `root`, Contraseña: `root`)
+
+---
+
+## 💻 Instalación Local (Sin Docker)
+
+Si prefieres ejecutar el proyecto de forma nativa:
+
+1. **Instalar dependencias**:
+   ```bash
+   composer install
+   ```
+
+2. **Crear base de datos local**:
+   Crea una base de datos llamada `fraccionamiento` en tu servidor MySQL.
+
+3. **Configurar el archivo `.env`**:
+   Ajusta las credenciales de tu base de datos local:
+   ```ini
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=fraccionamiento
+   DB_USERNAME=tu_usuario
+   DB_PASSWORD=tu_contraseña
+   ```
+
+4. **Correr migraciones y seeders**:
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+5. **Iniciar Servidor**:
+   ```bash
+   php artisan serve
+   ```
+   Accede a [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+---
+
+## 📂 Estructura de Directorios (Clean Architecture)
+
+El proyecto extiende el estándar MVC incorporando capas adicionales para lógica de negocio desacoplada:
+
+```text
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/  # Controladores HTTP (Manejan peticiones y respuestas)
+│   │   ├── Middleware/   # Filtros de peticiones (Autenticación y RBAC)
+│   │   └── Requests/     # Validaciones de formularios (FormRequests)
+│   ├── Models/           # Modelos Eloquent y relaciones de datos
+│   ├── Services/         # Servicios (Lógica de negocio pura, ej: cobro Stripe)
+│   └── Repositories/     # Capa de datos para desacoplar consultas Eloquent
+├── database/
+│   ├── factories/        # Fábricas de modelos para testing
+│   ├── migrations/       # Esquemas de la base de datos (14 tablas normalizadas)
+│   └── seeders/          # Semilleros con datos de desarrollo iniciales
+├── docker/               # Configuraciones adicionales de Nginx y Dockerfile
+└── docker-compose.yml    # Orquestación de contenedores de desarrollo
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 👥 Usuarios de Prueba Generados
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Puedes iniciar sesión con los siguientes usuarios demo una vez ejecutado el seeder (`php artisan db:seed`):
 
-## Code of Conduct
+* **Administrador**:
+  * Email: `admin@fracc.com`
+  * Contraseña: `password`
+* **Vigilante**:
+  * Email: `vigilante@fracc.com`
+  * Contraseña: `password`
+* **Residente**:
+  * Email: `juan.perez@example.com`
+  * Contraseña: `password`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🔒 Buenas Prácticas de Seguridad Implementadas
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* **Protección contra Inyección SQL**: Mediante el uso exclusivo de sentencias preparadas de Eloquent.
+* **Protección CSRF**: Activado automáticamente en todas las peticiones Blade post/put.
+* **Sólido RBAC**: Verificaciones granulares de roles y permisos a nivel de base de datos en relaciones N:M.
+* **Hashing seguro**: Todas las contraseñas están encriptadas utilizando `BCrypt` a través de los helpers nativos de Laravel.
